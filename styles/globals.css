@@ -1,0 +1,11 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+    .bg{
+        background-image: url(/imgs/bg.jpg);
+        background-position: center;
+        background-size: cover;
+    }
+}

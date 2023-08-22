@@ -1,4 +1,3 @@
-
 import { useEffect,useContext } from 'react';
 import { AppContext } from '@/settings/globals';
 import Image from 'next/image';
@@ -7,19 +6,21 @@ import { useRouter } from 'next/router';
 
 export default function Home() {
   const router = useRouter();
-  const {ip} = useContext(AppContext);
-  console.log(ip);
+  const {ip,signedIn} = useContext(AppContext);
+
+
+  console.log(ip, signedIn);
   // console.log(router.query.language);
 
-  // useEffect(() => {
-  //   setTimeout(() => {
+  // useEffect(()=>{
+  //   setTimeout(()=>{
   //     router.push('/account/make-transfer')
-  //   }, 5000);
-  // }, []);
+  //   },5000)
+  // },[]);
 
   return (
     <>
-      <div className="h-screen w-full flex flex-col justify-around bg">
+      <div className="h-screen w-full flex flex-col justify-around mobile-bg sm:tablet-bg lg:desktop-bg">
         <Image src="/imgs/bg-mobile.jpg" width={60} height={60} className="h-screen w-full sm:hidden" alt="cover image"/>
         <div className="w-full flex flex-col sm:flex-row justify-center items-center gap-4 px-8 sm:px-10 lg:px-24">
             <div className="w-full sm:min-h-[480px] bg-indigo-300/20 py-6 sm:py-10 px-[40px] rounded-lg">
@@ -38,7 +39,8 @@ export default function Home() {
                     placeholder="Password"
                     className="py-3 sm:py-5 px-2 border border-indigo-400 rounded-lg bg-white/60"
                     />
-                    <button className="max-w-[160px] h-12 bg-indigo-800 rounded-lg text-white font-bold"
+                    <button 
+                    className="max-w-[160px] h-12 bg-indigo-800 rounded-lg text-white font-bold"
                     >Log in to facepal</button>
                 </form>
         

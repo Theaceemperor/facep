@@ -1,4 +1,4 @@
-import Image from 'next/image'
+import Image from 'next/image';
 import { useSession } from 'next-auth/react';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ChatBubbleOutlineRoundedIcon from '@mui/icons-material/ChatBubbleOutlineRounded';
@@ -22,7 +22,7 @@ export default function PostDisplay({timePosted,body,postImage}) {
                     <div className='flex flex-col'>
                         <small className="text-gray-800">{session?.user.name}</small>
                         <small className='text-gray-500'>
-                            {timePosted}
+                            {timePosted} 
                             <PublicIcon sx={{fontSize:15}} />
                         </small>
                     </div>
@@ -32,19 +32,20 @@ export default function PostDisplay({timePosted,body,postImage}) {
                         <button className='p-2 hover:bg-gray-200 rounded-full'>
                             <MoreHorizIcon />
                         </button>
-                        <button className='p-2 hover:bg-gray-200 rounded-full'>
+                        {/* <button className='p-2 hover:bg-gray-200 rounded-full'>
                             <ClearIcon />
-                        </button>
+                        </button> */}
                     </div>
                 </li>
             </ul>
             
             <p className='px-4'>{body}</p>
             <Image  
-            src={postImage} 
-            width={50}
-            height={50}
-            className='w-full py-4'/>
+            src={postImage}
+            width={560}
+            height={560}
+            alt='post image'
+            className='w-full h-auto py-4'/>
             <div className='flex flex-row justify-between px-4'>
                 <div className='flex items-center justify-center w-[20px] h-[20px] rounded-full bg-sky-800'>
                     <ThumbUpIcon 
@@ -66,11 +67,11 @@ export default function PostDisplay({timePosted,body,postImage}) {
                     <ChatBubbleOutlineRoundedIcon />
                     Comment
                 </button>
-                <button className='w-full p-2 hover:bg-gray-200 text-gray-500 rounded'>
+                {/* <button className='w-full p-2 hover:bg-gray-200 text-gray-500 rounded'>
                     <ReplyOutlinedIcon  />
                     Share
-                </button>
+                </button> */}
             </div>
-        </div> 
+        </div>  
     )
 }

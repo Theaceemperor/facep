@@ -5,7 +5,7 @@ import { getFirestore } from 'firebase/firestore'
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyBvn8-oF12E3_Zsh82zNk1TOosWwDGWaNI",
+  apiKey: "AIzaSyD3BNnkS4_E6R_ZTEvvy4Vi7JIQ9h5xmuY",
   authDomain: "facepal-359fe.firebaseapp.com",
   projectId: "facepal-359fe",
   storageBucket: "facepal-359fe.appspot.com",

@@ -11,13 +11,14 @@ import { collection,query,where,getDocs,orderBy } from 'firebase/firestore';
 export default function Feed() {
     const {data:session} = useSession();
     const router = useRouter();
+    const myEmail = session?.user.email;
 
     const [userPosts, setUserPosts] = React.useState([]);
 
     const handleGetUserPosts = async () => {
         const q = query(
             collection(db,'posts'),
-            where('author','==',session.user.email),
+            where('author','==',myEmail),
             orderBy('postedAt', 'desc')
             );
         const onSnapShot = await getDocs(q);

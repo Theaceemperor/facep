@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import {GoSignOut} from 'react-icons/go';
-import { useSession, signOut } from 'next-auth/react';
+import { useSession, signOut, getSession } from 'next-auth/react';
 import React from 'react';
 import { useRouter } from 'next/router';
 import PostDisplay from '@/components/PostDisplay';
@@ -11,33 +11,42 @@ import { collection,query,where,getDocs,orderBy } from 'firebase/firestore';
 export default function Feed() {
     const {data:session} = useSession();
     const router = useRouter();
-    const myEmail = session?.user.email;
+    // const myEmail = async () => {
+    //     const {data:session} = useSession();
+    //     const sessionEmail = await session.user.email
 
-    const [userPosts, setUserPosts] = React.useState([]);
-
-    const handleGetUserPosts = async () => {
-        const q = query(
-            collection(db,'posts'),
-            where('author','==',myEmail),
-            orderBy('postedAt', 'desc')
-            );
-        const onSnapShot = await getDocs(q);
-        setUserPosts(onSnapShot.docs.map(doc => {
-            return {
-                id:doc.id,
-                data:{
-                    ...doc.data()
-                }
-            }
-        }));
-    }
-    handleGetUserPosts();
-
+    //     return sessionEmail;
+    // }
+    
     React.useEffect(() => {
         if(!session) {
             router.push('/auth/signup')
         }
     }, []);
+
+    const [userPosts, setUserPosts] = React.useState([]);
+
+    React.useEffect(() => { 
+        const handleGetUserPosts = async () => {
+            const q = query(
+                collection(db,'posts'),
+                where('author','==',session.user.email),
+                orderBy('postedAt', 'desc')
+                );
+            const onSnapShot = await getDocs(q);
+            setUserPosts(onSnapShot.docs.map(doc => {
+                return {
+                    id:doc.id,
+                    data:{
+                        ...doc.data()
+                    }
+                }
+            }));
+        }
+    
+        handleGetUserPosts();
+    })
+
     return (
         <>
             <main className="h-screen flex justify-center bg-gradient-to-b from-indigo-500 via-sky-500 to-pink-500">

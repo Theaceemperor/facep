@@ -45,7 +45,7 @@ export default function Feeds() {
       <main className="h-screen flex justify-center bg-gradient-to-b from-indigo-500 via-sky-500 to-pink-500">
             <div className="w-full sm:w-[400px] h-full bg-white overflow-y-scroll">
                 {/* profile holder */}
-                <header className="flex flex-row justify-between bg-indigo-300 p-3 shadow-md">
+                <header className="flex flex-row justify-between bg-indigo-300 p-3 shadow-md items-center">
                     <Image 
                     width={140} 
                     height={58} 

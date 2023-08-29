@@ -63,12 +63,22 @@ export default function Feed() {
                             <p className="text-sm mt-1">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Alias eum voluptatum distinctio rem culpa
                             aperiam assumenda deserunt molestias,
                             doloremque iusto adipisicing elit. Reprehenderit est vitae alias officiis!</p>
-                            <GoSignOut
-                            className="text-gray-800 my-3"
-                            onClick={() => signOut()} />
-                            <GoSignOut
-                            className="text-gray-800 my-3"
-                            onClick={() => router.push('/feeds')} />
+                            
+                            <div className='flex justify-between'>
+                                <span className='flex items-center gap-2'>
+                                    Sign Out {
+                                        <GoSignOut
+                                        className="text-gray-800 my-3"
+                                        onClick={() => signOut()} />
+                                    }</span>
+                                <span className='flex items-center gap-2'>
+                                    Feeds {
+                                        <GoSignOut
+                                        className="text-gray-800 my-3"
+                                        onClick={() => router.push('/feeds')} />
+                                    }
+                                </span>
+                            </div>
                             <ul className="flex flex-row justify-between mt-1">
                                 <li className="text-sm text-gray-700">🇹🇴 Abuja</li>
                                 <li className="text-sm text-gray-700">pal since 2022</li>

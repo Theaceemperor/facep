@@ -10,8 +10,7 @@ import { collection,query,where,getDocs,orderBy } from 'firebase/firestore';
 
 export default function Feed() {
     const {data:session} = useSession();
-    const router = useRouter(); return sessionEmail;
-    // }
+    const router = useRouter();
     
     React.useEffect(() => {
         if(!session) {
@@ -67,6 +66,9 @@ export default function Feed() {
                             <GoSignOut
                             className="text-gray-800 my-3"
                             onClick={() => signOut()} />
+                            <GoSignOut
+                            className="text-gray-800 my-3"
+                            onClick={() => router.push('/feeds')} />
                             <ul className="flex flex-row justify-between mt-1">
                                 <li className="text-sm text-gray-700">🇹🇴 Abuja</li>
                                 <li className="text-sm text-gray-700">pal since 2022</li>

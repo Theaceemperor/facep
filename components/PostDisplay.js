@@ -11,15 +11,17 @@ import MenuItem from '@mui/material/MenuItem';
 import { Button } from '@mui/material';
 import Customdialog from './CustomDialog';
 import { db } from '@/settings/firebase.setting';
-import { doc,deleteDoc } from 'firebase/firestore';
+import { doc,deleteDoc, updateDoc } from 'firebase/firestore';
+import { TextField } from '@mui/material';
 
 export default function PostDisplay({postID,timePosted,body,postImage}) {
     const {data:session} = useSession();
+    const [formInput,setFormInput] = React.useState(body); //FOR POST UPDATE
     //MENU CONTROL >>>> START
-    const [anchorEl, setAnchorEl] = React.useState(null);
+    const [anchorEl, setAnchorEl] = React.useState(null); //FOR MENU BUTTON
     const open = Boolean(anchorEl);
-    const handleClick = (event) => setAnchorEl(event.currentTarget);
-    const handleClose = () => setAnchorEl(null);
+    const handleClick = (event) => setAnchorEl(event.currentTarget); //HANDLE MENU EVENT
+    const handleClose = () => setAnchorEl(null); //HANDLE MENU CLOSE
     //MENU CONTROL >>>> END
 
     //DIALOG CONTROL >>>> START
@@ -35,6 +37,20 @@ export default function PostDisplay({postID,timePosted,body,postImage}) {
         .catch((e) => console.error(e))
     }
 
+    {/* FIREBASE POST UPDATE */}
+    const postsRef = doc(db, "posts", `${postID}`);
+    const handleUpdatePost = async () => {
+        await updateDoc(postsRef, {
+            body:formInput,
+            updatedAt:new Date().getTime()
+        },
+        {
+            merge:true,
+        }).then(() => {
+            setFormInput('');
+            alert('Post updated successfully!')
+        }).catch((error) => console.error(error))
+    }
     return (
         <>
         <div className="border border-gray-100 bg-white rounded-md shadow-md py-4 mb-4">
@@ -101,6 +117,7 @@ export default function PostDisplay({postID,timePosted,body,postImage}) {
             </div>
         </div>  
 
+            {/* MENU BUTTON */}
             <Menu
                 id="demo-positioned-menu"
                 aria-labelledby="demo-positioned-button"
@@ -116,9 +133,11 @@ export default function PostDisplay({postID,timePosted,body,postImage}) {
                 horizontal: 'left',
                 }}
             >
-                <MenuItem>Update</MenuItem>
+                <MenuItem onClick={handleClickOpenDialog}>Update</MenuItem>
                 <MenuItem onClick={handleClickOpenDialog}>Delete</MenuItem>
             </Menu>
+
+            {/* POST DELETE */}
             <Customdialog 
                 openProp={openDialog} 
                 handleCloseProp={handleCloseDialog} 
@@ -132,6 +151,27 @@ export default function PostDisplay({postID,timePosted,body,postImage}) {
                     onClick={handleDeletePost}>
                         Yes, delete
                     </Button>
+            </Customdialog>
+
+            {/* POST UPDATE */}
+            <Customdialog 
+                openProp={openDialog} 
+                handleCloseProp={handleCloseDialog} 
+                title={'Update Post.'}>
+                    <TextField
+                    multiline={true}
+                    className='w-full'
+                    placeholder="what's on your mind ..."
+                    value={formInput}
+                    onChange={(text) => setFormInput(text.target.value)}/>
+
+                    {formInput.length > 0
+                    ? <Button 
+                    variant='outlined'
+                    className='block w-[100px]'
+                    onClick={handleUpdatePost}
+                    style={{marginTop:8}}>Update</Button>
+                    : null}
             </Customdialog>
         </>
     )

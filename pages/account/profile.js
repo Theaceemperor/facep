@@ -15,20 +15,24 @@ export default function Feed() {
     const [userPosts, setUserPosts] = React.useState([]);
 
     const handleGetUserPosts = async () => {
-        const q = query(
-            collection(db,'posts'),
-            where('author','==',session.user.email),
-            orderBy('postedAt', 'desc')
-            );
-        const onSnapShot = await getDocs(q);
-        setUserPosts(onSnapShot.docs.map(doc => {
-            return {
-                id:doc.id,
-                data:{
-                    ...doc.data()
+        try {
+            const q = query(
+                collection(db,'posts'),
+                where('author','==',session.user.email),
+                orderBy('postedAt', 'desc')
+                );
+            const onSnapShot = await getDocs(q);
+            setUserPosts(onSnapShot.docs.map(doc => {
+                return {
+                    id:doc.id,
+                    data:{
+                        ...doc.data()
+                    }
                 }
-            }
-        }));
+            }));            
+        } catch (error) {
+            console.error(error)
+        }
     }
     handleGetUserPosts();
 

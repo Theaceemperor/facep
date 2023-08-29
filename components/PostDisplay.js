@@ -8,17 +8,19 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import { hoursAgo } from '@/assets/hoursAgo';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import { Button } from '@mui/material';
 import Customdialog from './CustomDialog';
 import { db } from '@/settings/firebase.setting';
 import { doc,deleteDoc, updateDoc } from 'firebase/firestore';
-import { TextField } from '@mui/material';
+import { TextField,CircularProgress,Button } from '@mui/material';
+import ActivityIndicator from '@/utils/activity-indicator';
 
 export default function PostDisplay({postID,timePosted,body,postImage}) {
     const {data:session} = useSession();
     const [formInput,setFormInput] = React.useState(body); //FOR POST UPDATE
     //MENU CONTROL >>>> START
     const [anchorEl, setAnchorEl] = React.useState(null); //FOR MENU BUTTON
+    const [showActivityIndicator,setShowActivityIndicator] = React.useState(false);
+
     const open = Boolean(anchorEl);
     const handleClick = (event) => setAnchorEl(event.currentTarget); //HANDLE MENU EVENT
     const handleClose = () => setAnchorEl(null); //HANDLE MENU CLOSE
@@ -40,6 +42,8 @@ export default function PostDisplay({postID,timePosted,body,postImage}) {
     {/* FIREBASE POST UPDATE */}
     const postsRef = doc(db, "posts", `${postID}`);
     const handleUpdatePost = async () => {
+        handleCloseDialog();
+        setShowActivityIndicator(true); //start activity indicator
         await updateDoc(postsRef, {
             body:formInput,
             updatedAt:new Date().getTime()
@@ -47,12 +51,17 @@ export default function PostDisplay({postID,timePosted,body,postImage}) {
         {
             merge:true,
         }).then(() => {
+            setShowActivityIndicator(false); //stop activity indicator 
             setFormInput('');
             alert('Post updated successfully!')
-        }).catch((error) => console.error(error))
+        }).catch((error) => {
+            setShowActivityIndicator(false); //stop activity indicator
+            console.error(error); 
+        })
     }
     return (
         <>
+        { showActivityIndicator ? <ActivityIndicator /> : null }
         <div className="border border-gray-100 bg-white rounded-md shadow-md py-4 mb-4">
             <ul className="flex justify-between px-4">
                 <li className="flex flex-row gap-1 items-center">

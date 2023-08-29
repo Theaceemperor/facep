@@ -10,12 +10,7 @@ import { collection,query,where,getDocs,orderBy } from 'firebase/firestore';
 
 export default function Feed() {
     const {data:session} = useSession();
-    const router = useRouter();
-    // const myEmail = async () => {
-    //     const {data:session} = useSession();
-    //     const sessionEmail = await session.user.email
-
-    //     return sessionEmail;
+    const router = useRouter(); return sessionEmail;
     // }
     
     React.useEffect(() => {
@@ -26,8 +21,8 @@ export default function Feed() {
 
     const [userPosts, setUserPosts] = React.useState([]);
 
-    React.useEffect(() => { 
-        const handleGetUserPosts = async () => {
+    const handleGetUserPosts = async () => {
+        try {
             const q = query(
                 collection(db,'posts'),
                 where('author','==',session.user.email),
@@ -41,11 +36,12 @@ export default function Feed() {
                         ...doc.data()
                     }
                 }
-            }));
+            }));            
+        } catch (error) {
+            console.error(error)
         }
-    
-        handleGetUserPosts();
-    })
+    }
+    handleGetUserPosts();
 
     return (
         <>

@@ -6,6 +6,7 @@ import { useRouter } from 'next/router';
 import PostDisplay from '@/components/PostDisplay';
 import { db } from '@/settings/firebase.setting';
 import { collection,query,where,getDocs,orderBy } from 'firebase/firestore';
+import MetaHeader from '@/utils/metahead';
 
 
 export default function Feed() {
@@ -44,6 +45,7 @@ export default function Feed() {
 
     return (
         <>
+            <MetaHeader />
             <main className="h-screen flex justify-center bg-gradient-to-b from-indigo-500 via-sky-500 to-pink-500">
                 <div className="w-full sm:w-[400px] h-full bg-white overflow-y-scroll">
                    

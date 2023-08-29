@@ -6,8 +6,8 @@ import WritePost from '@/components/WritePost';
 import {getDocs,collection} from 'firebase/firestore';
 import { db } from '@/settings/firebase.setting';
 import PostDisplay from '@/components/PostDisplay';
-import Head from 'next/head';
 import Link from 'next/link';
+import MetaHeader from '@/utils/metahead';
 
 export default function Feeds() {
   const {data:session} = useSession();
@@ -37,11 +37,7 @@ export default function Feeds() {
 
   return (
     <>
-    <Head>
-      <link rel='shortcut icon' href='facepal_icon_logo.ICO' type='image/x-icon' />
-      <title>facepal | connect wiith friends</title>
-      <meta name='description' content='facepal is the coolest social media platform to connect with friends and hold money'/>
-    </Head>
+      <MetaHeader />
       <main className="h-screen flex justify-center bg-gradient-to-b from-indigo-500 via-sky-500 to-pink-500">
             <div className="w-full sm:w-[400px] h-full bg-white overflow-y-scroll">
                 {/* profile holder */}

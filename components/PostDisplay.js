@@ -11,7 +11,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Customdialog from './CustomDialog';
 import { db } from '@/settings/firebase.setting';
 import { doc,deleteDoc, updateDoc } from 'firebase/firestore';
-import { TextField,CircularProgress,Button } from '@mui/material';
+import { TextField,Button } from '@mui/material';
 import ActivityIndicator from '@/utils/activity-indicator';
 
 export default function PostDisplay({postID,timePosted,body,postImage}) {

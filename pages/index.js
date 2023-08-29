@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from "next/link";
 import { useRouter } from 'next/router';
 import { signIn } from 'next-auth/react';
+import MetaHeader from '@/utils/metahead';
 
 export default function Home() {
   const router = useRouter();
@@ -21,6 +22,7 @@ export default function Home() {
 
   return (
     <>
+      <MetaHeader />
       <div className="h-screen w-full flex flex-col justify-around mobile-bg sm:tablet-bg lg:desktop-bg">
         <Image src="/imgs/bg-mobile.jpg" width={60} height={60} className="h-screen w-full hidden" alt="cover image"/>
         <div className="w-full flex flex-col sm:flex-row justify-center items-center gap-4 px-8 sm:px-10 lg:px-24">

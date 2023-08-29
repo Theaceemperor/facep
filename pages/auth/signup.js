@@ -5,6 +5,7 @@ import { signIn, useSession } from "next-auth/react";
 import { authentication } from "@/settings/firebase.setting";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { useRouter } from "next/router";
+import MetaHeader from "@/utils/metahead";
 
 const vaidationRules = yup.object().shape({
     email:yup.string().required('this field is compulsory'),
@@ -41,6 +42,7 @@ export default function Signup() {
 
     return (
         <>
+        <MetaHeader />
         <main className="h-screen flex flex-row items-center justify-center">
         <div className="w-[480] sm:min-h-[480px] flex flex-col gap-5">
                 <form className="flex flex-col gap-3" onSubmit={handleSubmit}>

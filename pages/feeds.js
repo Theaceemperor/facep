@@ -8,6 +8,8 @@ import { db } from '@/settings/firebase.setting';
 import PostDisplay from '@/components/PostDisplay';
 import Head from 'next/head';
 import Link from 'next/link';
+import { getServerSession } from 'next-auth';
+import { authOptions } from './api/auth/[...nextauth]';
 
 export default function Feeds() {
   const {data:session} = useSession();
@@ -85,4 +87,23 @@ export default function Feeds() {
         </main>
     </>
   )
+}
+
+export async function getServerSideProps(context) {
+  const session = await getServerSession(context.req,context.res,authOptions);
+  
+  if(!session) {
+    return {
+      redirect:{
+        destination:'/auth/signup',
+        permanent:false,
+      }
+    }
+  }
+
+  return {
+    props:{
+      session:session
+    }
+  }
 }

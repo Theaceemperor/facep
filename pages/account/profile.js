@@ -6,6 +6,8 @@ import { useRouter } from 'next/router';
 import PostDisplay from '@/components/PostDisplay';
 import { db } from '@/settings/firebase.setting';
 import { collection,query,where,getDocs,orderBy } from 'firebase/firestore';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '../api/auth/[...nextauth]';
 
 
 export default function Feed() {
@@ -36,11 +38,6 @@ export default function Feed() {
     }
     handleGetUserPosts();
 
-    React.useEffect(() => {
-        if(!session) {
-            router.push('/auth/signup')
-        }
-    }, []);
     return (
         <>
             <main className="h-screen flex justify-center bg-gradient-to-b from-indigo-500 via-sky-500 to-pink-500">
@@ -92,3 +89,22 @@ export default function Feed() {
         </>
     )
 }
+
+export async function getServerSideProps(context) {
+    const session = await getServerSession(context.req,context.res,authOptions);
+    
+    if(!session) {
+      return {
+        redirect:{
+          destination:'/auth/signup',
+          permanent:false,
+        }
+      }
+    }
+  
+    return {
+      props:{
+        session:session
+      }
+    }
+  }

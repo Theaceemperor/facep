@@ -7,9 +7,9 @@ import {getDocs,collection} from 'firebase/firestore';
 import { db } from '@/settings/firebase.setting';
 import PostDisplay from '@/components/PostDisplay';
 import Link from 'next/link';
-import MetaHeader from '@/utils/metahead';
 import { getServerSession } from 'next-auth';
 import { authOptions } from './api/auth/[...nextauth]';
+import MetaHeader from '@/utils/metahead';
 
 export default function Feeds() {
   const {data:session} = useSession();
@@ -87,10 +87,18 @@ export default function Feeds() {
 
 export async function getServerSideProps(context) {
   const session = await getServerSession(context.req,context.res,authOptions);
-  console.log('FROM FEEDS >>>>>>',session);
+  
+  if(!session) {
+    return {
+      redirect:{
+        destination:'/auth/signup',
+        permanent:false,
+      }
+    }
+  }
+
   return {
     props:{
-      // session:session.JSON.parse(JSON.stringify(session))
       session:session
     }
   }

@@ -6,6 +6,8 @@ import { useRouter } from 'next/router';
 import PostDisplay from '@/components/PostDisplay';
 import { db } from '@/settings/firebase.setting';
 import { collection,query,where,getDocs,orderBy } from 'firebase/firestore';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '../api/auth/[...nextauth]';
 import MetaHeader from '@/utils/metahead';
 
 
@@ -108,3 +110,22 @@ export default function Feed() {
         </>
     )
 }
+
+export async function getServerSideProps(context) {
+    const session = await getServerSession(context.req,context.res,authOptions);
+    
+    if(!session) {
+      return {
+        redirect:{
+          destination:'/auth/signup',
+          permanent:false,
+        }
+      }
+    }
+  
+    return {
+      props:{
+        session:session
+      }
+    }
+  }

@@ -4,6 +4,9 @@ import Image from 'next/image';
 import Link from "next/link";
 import { useRouter } from 'next/router';
 import { signIn } from 'next-auth/react';
+import MetaHeader from '@/utils/metahead';
+import { AiOutlineDoubleRight } from 'react-icons/ai';
+import { BiHelpCircle } from 'react-icons/bi';
 
 export default function Home() {
   const router = useRouter();
@@ -21,6 +24,7 @@ export default function Home() {
 
   return (
     <>
+      <MetaHeader />
       <div className="h-screen w-full flex flex-col justify-around mobile-bg sm:tablet-bg lg:desktop-bg">
         <Image src="/imgs/bg-mobile.jpg" width={60} height={60} className="h-screen w-full hidden" alt="cover image"/>
         <div className="w-full flex flex-col sm:flex-row justify-center items-center gap-4 px-8 sm:px-10 lg:px-24">
@@ -46,9 +50,19 @@ export default function Home() {
                 </form>
         
                 <div className="w-full grid grid-cols-2 gap-3">
-                    <button className="w-full h-12 bg-green-600 rounded-lg text-white font-bold"
-                    onClick={() => signIn("google")}>Google</button>
-                    <button className="w-full h-12 bg-sky-600 rounded-lg text-white font-bold">Twitter</button>
+                    <Link 
+                    href={'#'}
+                    className="w-full h-12 flex flex-row gap-4 justify-center items-center bg-violet-950 rounded-lg text-white font-bold"
+                    >
+                      Get started
+                      <AiOutlineDoubleRight />
+                    </Link>
+                    <Link 
+                    href={'#'}
+                    className="w-full h-12 flex flex-row gap-4 justify-center items-center bg-violet-600 rounded-lg text-white font-bold">
+                      Get Help
+                      <BiHelpCircle />
+                    </Link>
                 </div>
         
                 <p className="text-2xl text-white">New to facepal? <Link href="/auth/signup" className="underline">create account</Link></p>

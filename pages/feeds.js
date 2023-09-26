@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import Image from 'next/image';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
@@ -6,21 +6,22 @@ import WritePost from '@/components/WritePost';
 import {getDocs,collection} from 'firebase/firestore';
 import { db } from '@/settings/firebase.setting';
 import PostDisplay from '@/components/PostDisplay';
-import Head from 'next/head';
 import Link from 'next/link';
 import { getServerSession } from 'next-auth';
 import { authOptions } from './api/auth/[...nextauth]';
+import MetaHeader from '@/utils/metahead';
+import { AppContext } from '@/settings/globals';
 
 export default function Feeds() {
   const {data:session} = useSession();
   const [posts,setPosts] = useState([]);
   const router = useRouter();
 
-  React.useEffect(() => {
-    if(!session) {
-      router.push('/auth/signup')
-    }
-  },[]);
+  // React.useEffect(() => {
+  //   if(!session) {
+  //     router.push('/auth/signup')
+  //   }
+  // },[]);
 
   //get posts from firestore
   const getPosts = async () => {
@@ -39,11 +40,7 @@ export default function Feeds() {
 
   return (
     <>
-    <Head>
-      <link rel='shortcut icon' href='facepal_icon_logo.ICO' type='image/x-icon' />
-      <title>facepal | connect wiith friends</title>
-      <meta name='description' content='facepal is the coolest social media platform to connect with friends and hold money'/>
-    </Head>
+      <MetaHeader />
       <main className="h-screen flex justify-center bg-gradient-to-b from-indigo-500 via-sky-500 to-pink-500">
             <div className="w-full sm:w-[400px] h-full bg-white overflow-y-scroll">
                 {/* profile holder */}

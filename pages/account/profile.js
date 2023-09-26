@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import {GoSignOut} from 'react-icons/go';
-import { useSession, signOut } from 'next-auth/react';
+import { useSession, signOut, getSession } from 'next-auth/react';
 import React from 'react';
 import { useRouter } from 'next/router';
 import PostDisplay from '@/components/PostDisplay';
@@ -8,11 +8,18 @@ import { db } from '@/settings/firebase.setting';
 import { collection,query,where,getDocs,orderBy } from 'firebase/firestore';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../api/auth/[...nextauth]';
+import MetaHeader from '@/utils/metahead';
 
 
 export default function Feed() {
     const {data:session} = useSession();
     const router = useRouter();
+    
+    React.useEffect(() => {
+        if(!session) {
+            router.push('/auth/signup')
+        }
+    }, []);
 
     const [userPosts, setUserPosts] = React.useState([]);
 
@@ -40,6 +47,7 @@ export default function Feed() {
 
     return (
         <>
+            <MetaHeader />
             <main className="h-screen flex justify-center bg-gradient-to-b from-indigo-500 via-sky-500 to-pink-500">
                 <div className="w-full sm:w-[400px] h-full bg-white overflow-y-scroll">
                    
@@ -59,9 +67,22 @@ export default function Feed() {
                             <p className="text-sm mt-1">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Alias eum voluptatum distinctio rem culpa
                             aperiam assumenda deserunt molestias,
                             doloremque iusto adipisicing elit. Reprehenderit est vitae alias officiis!</p>
-                            <GoSignOut
-                            className="text-gray-800 my-3"
-                            onClick={() => signOut()} />
+                            
+                            <div className='flex justify-between'>
+                                <span className='flex items-center gap-2'>
+                                    Sign Out {
+                                        <GoSignOut
+                                        className="text-gray-800 my-3"
+                                        onClick={() => signOut()} />
+                                    }</span>
+                                <span className='flex items-center gap-2'>
+                                    Feeds {
+                                        <GoSignOut
+                                        className="text-gray-800 my-3"
+                                        onClick={() => router.push('/feeds')} />
+                                    }
+                                </span>
+                            </div>
                             <ul className="flex flex-row justify-between mt-1">
                                 <li className="text-sm text-gray-700">🇹🇴 Abuja</li>
                                 <li className="text-sm text-gray-700">pal since 2022</li>

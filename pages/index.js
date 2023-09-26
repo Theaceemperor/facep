@@ -51,7 +51,7 @@ export default function Home() {
         
                 <div className="w-full grid grid-cols-2 gap-3">
                     <Link 
-                    href={'#'}
+                    href={'/auth/signup'}
                     className="w-full h-12 flex flex-row gap-4 justify-center items-center bg-violet-950 rounded-lg text-white font-bold"
                     >
                       Get started
@@ -64,8 +64,9 @@ export default function Home() {
                       <BiHelpCircle />
                     </Link>
                 </div>
-        
-                <p className="text-2xl text-white">New to facepal? <Link href="/auth/signup" className="underline">create account</Link></p>
+  
+                <p className="text-2xl text-white">Want to become a facepal partner? <Link href="/partner-signup" className="underline">Become a partner</Link></p>
+                
             </div>
         </div>
       </div>

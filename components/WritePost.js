@@ -80,21 +80,21 @@ export default function WritePost() {
                     value={formInput}
                     onChange={(text) => setFormInput(text.target.value)}/>
 
-                        {formInput.length > 0
-                        ? 
-                        <div className='flex flex-col gap-4'>
-                            <input 
-                            type='file'
-                            accept='image/*'
-                            onChange={ImageToPost}
-                            />
+                    {formInput.length > 0
+                    ? 
+                    <div className='flex flex-col gap-4'>
+                        <input 
+                        type='file'
+                        accept='image/*'
+                        onChange={ImageToPost}
+                        />
 
-                            <Button 
-                            variant='outlined'
-                            className='block w-[100px]'
-                            onClick={handleCreatePost}>Post</Button>
-                        </div>
-                        : null}
+                        <Button 
+                        variant='outlined'
+                        className='block w-[100px]'
+                        onClick={handleCreatePost}>Post</Button>
+                    </div>
+                    : null}
                 </div>
             </div>
             <hr style={{color:'black'}}/>

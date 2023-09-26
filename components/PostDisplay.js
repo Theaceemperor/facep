@@ -11,11 +11,22 @@ import MenuItem from '@mui/material/MenuItem';
 import Customdialog from './CustomDialog';
 import { db } from '@/settings/firebase.setting';
 import { doc,deleteDoc, updateDoc } from 'firebase/firestore';
-import { TextField,CircularProgress,Button } from '@mui/material';
+import { TextField,Button } from '@mui/material';
 import ActivityIndicator from '@/utils/activity-indicator';
+import { AppContext } from '@/settings/globals';
 
-export default function PostDisplay({postID,timePosted,body,postImage}) {
+export default function PostDisplay({postID,timePosted,body,postImage,authourUID}) {
     const {data:session} = useSession();
+    const { users } = React.useContext(AppContext);
+
+    const getPostByAuthorInfo = (authorEmail) => {
+        const filteredUser = users.filter(item => item.id == authourUID);
+
+        return {
+        a_name:filteredUser[0].data.name,
+        a_img:filteredUser[0].data.image,
+        }
+    }
     const [formInput,setFormInput] = React.useState(body); //FOR POST UPDATE
     //MENU CONTROL >>>> START
     const [anchorEl, setAnchorEl] = React.useState(null); //FOR MENU BUTTON
@@ -67,11 +78,11 @@ export default function PostDisplay({postID,timePosted,body,postImage}) {
                 <li className="flex flex-row gap-1 items-center">
                     <Image 
                     className="rounded-full" 
-                    src={session?.user.image} 
+                    src={getPostByAuthorInfo().a_img} 
                     width={40} height={40} 
                     alt="profile photo"/>                                
                     <div className='flex flex-col'>
-                        <small className="text-gray-800">{session?.user.name}</small>
+                        <small className="text-gray-800">{getPostByAuthorInfo().a_name}</small>
                         <small className='text-gray-500'>
                             <span>{hoursAgo(timePosted)} hour(s) ago </span>
                             <PublicIcon sx={{fontSize:15}} />

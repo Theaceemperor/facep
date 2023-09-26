@@ -9,6 +9,7 @@ import { collection,query,where,getDocs,orderBy } from 'firebase/firestore';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../api/auth/[...nextauth]';
 import MetaHeader from '@/utils/metahead';
+import Head from 'next/head';
 
 
 export default function Feed() {
@@ -27,7 +28,7 @@ export default function Feed() {
         try {
             const q = query(
                 collection(db,'posts'),
-                where('author','==',session.user.email),
+                where('author','==',session.uid),
                 orderBy('postedAt', 'desc')
                 );
             const onSnapShot = await getDocs(q);
@@ -43,11 +44,15 @@ export default function Feed() {
             console.error(error)
         }
     }
-    handleGetUserPosts();
+    handleGetUserPosts()
 
     return (
         <>
-            <MetaHeader />
+            <Head>
+                <link rel="shortcut icon" href="/facepal_icon_logo.ico" type="image/x-icon" />
+                <title>facepal | Profile</title>
+                <meta name="description" content="facepal is the coolest social media platform to connect with friends and hold money" />
+            </Head>
             <main className="h-screen flex justify-center bg-gradient-to-b from-indigo-500 via-sky-500 to-pink-500">
                 <div className="w-full sm:w-[400px] h-full bg-white overflow-y-scroll">
                    
@@ -94,7 +99,7 @@ export default function Feed() {
                     <div className='flex flex-col gap-2 p-3'>
                         {
                         userPosts.map(post => (
-                            <div id={post.id}>
+                            <div key={post.id}>
                             <PostDisplay 
                             postID={post.id}
                             timePosted={post.data.postedAt}

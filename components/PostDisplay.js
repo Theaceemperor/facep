@@ -15,18 +15,19 @@ import { TextField,Button } from '@mui/material';
 import ActivityIndicator from '@/utils/activity-indicator';
 import { AppContext } from '@/settings/globals';
 
-export default function PostDisplay({postID,timePosted,body,postImage,authourUID}) {
+export default function PostDisplay({postID,timePosted,body,postImage,authorUid}) {
     const {data:session} = useSession();
     const { users } = React.useContext(AppContext);
 
-    const getPostByAuthorInfo = (authorEmail) => {
-        const filteredUser = users.filter(item => item.id == authourUID);
+    const getPostByAuthorInfo = (authorUID) => {
+      const filteredUser = users.filter(item => item.id == authorUID);
 
-        return {
+      return {
         a_name:filteredUser[0].data.name,
-        a_img:filteredUser[0].data.image,
-        }
+        a_photo:filteredUser[0].data.image
+      }
     }
+
     const [formInput,setFormInput] = React.useState(body); //FOR POST UPDATE
     //MENU CONTROL >>>> START
     const [anchorEl, setAnchorEl] = React.useState(null); //FOR MENU BUTTON
@@ -78,7 +79,7 @@ export default function PostDisplay({postID,timePosted,body,postImage,authourUID
                 <li className="flex flex-row gap-1 items-center">
                     <Image 
                     className="rounded-full" 
-                    src={getPostByAuthorInfo().a_img} 
+                    src={getPostByAuthorInfo().a_photo} 
                     width={40} height={40} 
                     alt="profile photo"/>                                
                     <div className='flex flex-col'>

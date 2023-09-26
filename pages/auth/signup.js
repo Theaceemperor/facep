@@ -1,4 +1,4 @@
-
+import Head from "next/head";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { signIn, useSession } from "next-auth/react";
@@ -44,7 +44,11 @@ export default function Signup() {
 
     return (
         <>
-        <MetaHeader />
+        <Head>
+            <link rel="shortcut icon" href="/facepal_icon_logo.ico" type="image/x-icon" />
+            <title>facepal | Sign to facepal</title>
+            <meta name="description" content="facepal is the coolest social media platform to connect with friends and hold money" />
+        </Head>
         <main className="h-screen flex flex-row items-center justify-center">
         <div className="w-[480] sm:min-h-[480px] flex flex-col gap-5">
                 <form className="flex flex-col gap-3" onSubmit={handleSubmit}>

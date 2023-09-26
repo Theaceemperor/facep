@@ -1,17 +1,15 @@
-
-import React from "react";
 import Image from "next/image";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { db } from "@/settings/firebase.setting";
-import { query,getDocs,where,collection } from "firebase/firestore";
+import { query,where,getDocs,collection } from 'firebase/firestore';
 
 export async function getStaticPaths() {
     const onSnapShot = await getDocs(collection(db,'partners'));
     const paths = onSnapShot.docs.map(doc => {
         return {
             params:{
-                pagePath:doc.data().pagePath
+                pagePath:doc.data().pagePath,
             }
         }
     });
@@ -22,48 +20,48 @@ export async function getStaticPaths() {
     }
 }
 
-export async function getStaticProps() {
-    const partners = ['hello'];
+export async function getStaticProps({context}) {
+    // const slug = context.params.pagePath;
+
+    let partnerDoc = [];
+
+    const getPartnerInfo = async () => {
+        const q = query(collection(db,'partners'),where('pagePath','==','axel-space-communications'));
+        const onSnapShot = await getDocs(q);
+        onSnapShot.docs.map(doc => {
+            let doc_ = {
+                data:doc.data()
+            }
+            doc_.id = doc.id;
+            partnerDoc.push(doc_)
+        })
+    }
+    getPartnerInfo()
 
     return {
-        props:{
-            allPartners:partners
+        props: {
+            data:partnerDoc,
         }
     }
 }
 
-export default function PartnerInfo({allPartners}) {
-    const router = useRouter();
+export default function PartnerInfo ({data}) {
+    // const router = useRouter();
 
-    let partnerDoc = [];
-    const [partnerSpur,getPartnerSpur] = React.useState([]);
+    console.log('FROM CONTEXT',data);
 
-    const getPartnerInfo = async () => {
-        const q = query(collection(db,'partners'),where('pagePath','==',router.query.pagePath));
-        const onSnapShot = await getDocs(q);
-        getPartnerSpur(onSnapShot.docs.map(doc => {
-            let doc_ = {
-                data:doc.data(),
-                id:doc.id
-            }
-
-            partnerDoc.push(doc_)
-        })
-        )
-    }
-    getPartnerInfo()
 
     return (
         <>
-            <Head>
-                <link rel="icon" href="/facepal_icon_logo.png" />
-                <meta name="description" content="The Coolest way to connect with friends and hold money" />
-                <meta name="keywords" content="facepal" />
-                <title>facepal Partners | {partnerSpur.map(doc => {doc.data.pagePath})}</title>
-            </Head>
-            <main className="px-4 py-6 sm:px-16 sm:py-16 md:px-24 md:py-20">
+        <Head>
+            <link rel="icon" href="/facepal_icon_logo.png" />
+            <meta name="description" content="The Coolest way to connect with friends and hold money" />
+            <meta name="keywords" content="facepal" />
+            <title>facepal Partners | {}</title>
+        </Head>
+        <main className="px-4 py-6 sm:px-16 sm:py-16 md:px-24 md:py-20">
 
-            </main>
+        </main>
         </>
     )
 }

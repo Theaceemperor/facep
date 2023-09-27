@@ -1,25 +1,21 @@
 import React from 'react';
 import { getServerSession } from 'next-auth';
 import { authOptions } from './api/auth/[...nextauth]';
+import Head from 'next/head';
+import Link from 'next/link';
 import Image from 'next/image';
+import { useSession } from 'next-auth/react';
 import WritePost from '@/components/WritePost';
 import { getDocs,collection, query, orderBy } from 'firebase/firestore';
 import { db } from '@/settings/firebase.setting';
 import PostDisplay from '@/components/PostDisplay';
-import Link from 'next/link';
-import MetaHeader from '@/utils/metahead';
-import { AppContext } from '@/settings/globals';
+import { signOut } from 'next-auth/react';
+import { useRouter } from 'next/router';
 
 export default function Feeds() {
-  const {data:session} = useSession();
-  const [posts,setPosts] = useState([]);
+  const { data:session } = useSession();
+  const [posts,setPosts] = React.useState([]);
   const router = useRouter();
-
-  // React.useEffect(() => {
-  //   if(!session) {
-  //     router.push('/auth/signup')
-  //   }
-  // },[]);
 
   //get posts from firestore
   const getPosts = async () => {
@@ -60,7 +56,7 @@ export default function Feeds() {
                       className="rounded-full" 
                       width={58} 
                       height={58} 
-                      src={session?.user.image}
+                      src={'/imgs/joy.webp'}
                       alt="profile photo" />
                     </Link>
                 </header>
@@ -68,7 +64,6 @@ export default function Feeds() {
                 <div className="flex flex-col gap-2 p-3">
                     <WritePost/>
 
-                    {/* previous posts holder */}
                     <div className="flex flex-col gap-2">
                         {
                           posts.map(post => (
@@ -77,6 +72,8 @@ export default function Feeds() {
                               timePosted={post.data.postedAt}
                               body={post.data.body}
                               postImage={post.data.imageUrl}
+                              name={post.data.author}
+                              imgSrc={'/img/joy.webp'}
                               />
                             </div>
                           ))
@@ -95,7 +92,7 @@ export async function getServerSideProps(context) {
   if(!session) {
     return {
       redirect:{
-        destination:'/auth/signup',
+        destination:'/auth/signin',
         permanent:false,
       }
     }

@@ -5,9 +5,9 @@ import { FacepalContext } from '@/settings/globals'
 export default function App({ Component, session, ...pageProps }) {
   return (
     <SessionProvider session={session}>
-      <FacepalContext>
+      {/* <FacepalContext> */}
         <Component {...pageProps} />
-      </FacepalContext>
+      {/* </FacepalContext> */}
     </SessionProvider>
   )
 }

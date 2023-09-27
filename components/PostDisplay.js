@@ -5,7 +5,6 @@ import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ChatBubbleOutlineRoundedIcon from '@mui/icons-material/ChatBubbleOutlineRounded';
 import PublicIcon from '@mui/icons-material/Public';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-import { hoursAgo } from '@/assets/hoursAgo';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Customdialog from './CustomDialog';
@@ -13,20 +12,21 @@ import { db } from '@/settings/firebase.setting';
 import { doc,deleteDoc, updateDoc } from 'firebase/firestore';
 import { TextField,Button } from '@mui/material';
 import ActivityIndicator from '@/utils/activity-indicator';
-import { AppContext } from '@/settings/globals';
+//import { AppContext } from '@/settings/globals';
+import { timeAgo } from '@/assets/time-ago';
 
-export default function PostDisplay({postID,timePosted,body,postImage,authorUid}) {
+export default function PostDisplay({postID,timePosted,body,postImage,name,imgSrc}) {
     const {data:session} = useSession();
-    const { users } = React.useContext(AppContext);
-
-    const getPostByAuthorInfo = (authorUID) => {
-      const filteredUser = users.filter(item => item.id == authorUID);
-
-      return {
-        a_name:filteredUser[0].data.name,
-        a_photo:filteredUser[0].data.image
-      }
-    }
+   // const { usersPost } = React.useContext(AppContext);
+    
+        // const getPostByAuthorInfo = (authorUID) => {
+        //   const filteredUser = usersPost.filter(item => item.id == authorUID);
+    
+        //   return {
+        //     a_name:filteredUser[0].data.author,
+        //     a_photo:filteredUser[0].data.image
+        //   }
+        // }
 
     const [formInput,setFormInput] = React.useState(body); //FOR POST UPDATE
     //MENU CONTROL >>>> START
@@ -79,13 +79,13 @@ export default function PostDisplay({postID,timePosted,body,postImage,authorUid}
                 <li className="flex flex-row gap-1 items-center">
                     <Image 
                     className="rounded-full" 
-                    src={getPostByAuthorInfo().a_photo} 
+                    src={imgSrc} 
                     width={40} height={40} 
                     alt="profile photo"/>                                
                     <div className='flex flex-col'>
-                        <small className="text-gray-800">{getPostByAuthorInfo().a_name}</small>
+                        <small className="text-gray-800">{name}</small>
                         <small className='text-gray-500'>
-                            <span>{hoursAgo(timePosted)} hour(s) ago </span>
+                            <span>{timeAgo(timePosted)}</span>
                             <PublicIcon sx={{fontSize:15}} />
                         </small>
                     </div>
@@ -96,9 +96,6 @@ export default function PostDisplay({postID,timePosted,body,postImage,authorUid}
                             <MoreHorizIcon 
                             onClick={handleClick}/>
                         </button>
-                        {/* <button className='p-2 hover:bg-gray-200 rounded-full'>
-                            <ClearIcon />
-                        </button> */}
                     </div>
                 </li>
             </ul>

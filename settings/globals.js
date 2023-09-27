@@ -8,7 +8,7 @@ const FacepalContext = ({children}) => {
     const [users,setusers] = useState([]);
 
     const getUsers = async () => {
-        const onSnapShot = await getDocs(collection(db,'users'));
+        const onSnapShot = await getDocs(collection(db,'posts'));
         setusers(onSnapShot.docs.map(doc => {
             return {
                 id:doc.id,

@@ -40,7 +40,7 @@ export default function Signup() {
             handleGoogleEmailPasswordCreateAccount(values.email, values.password)
         },
         validationSchema:vaidationRules
-        })
+        });
 
     return (
         <>

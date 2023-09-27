@@ -1,9 +1,6 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import { useSession } from 'next-auth/react';
-// import VideoCameraFrontIcon from '@mui/icons-material/VideoCameraFront'
-// import PhotoLibraryIcon from '@mui/icons-material/PhotoLibrary';
-// import SentimentVerySatisfiedIcon from '@mui/icons-material/SentimentVerySatisfied';
 import { Button,TextField } from '@mui/material';
 import { db,storage } from '@/settings/firebase.setting';
 import { collection,addDoc, updateDoc,doc } from 'firebase/firestore';
@@ -34,9 +31,10 @@ export default function WritePost() {
     const handleCreatePost = async () => {
         const docRes = await addDoc(collection(db,'posts'),{
             body:formInput,
-            author:session.user.email,
+            author:session?.user.name,
+            user:session?.user.email,
             postedAt:new Date().getTime(),
-            imageUrl:cdnImages[rangeOfRandNums(0,cdnImages.length)]
+            imageUrl:null
         })
         // .then(() => {
 
@@ -65,12 +63,12 @@ export default function WritePost() {
     return (
         <form className="flex flex-col border border-gray-100 bg-white rounded-md shadow-md p-3 mb-4 gap-4">
             <div className='flex flex-row items-center gap-4'>
-                <Image 
+                {/* <Image 
                 className="rounded-full" 
                 width={48} 
                 height={48}
                 src={session?.user.image} 
-                alt="profile photo" />
+                alt="profile photo" /> */}
 
                 <div className='w-full flex flex-col gap-2'>
                     <TextField

@@ -51,7 +51,13 @@ export default function Home() {
         <Image src="/imgs/bg-mobile.jpg" width={60} height={60} className="h-screen w-full hidden" alt="cover image"/>
         <div className="w-full flex flex-col sm:flex-row justify-center items-center gap-4 px-8 sm:px-10 lg:px-24">
             <div className="w-full sm:min-h-[480px] bg-indigo-300/20 py-6 sm:py-10 px-[40px] rounded-lg">
-                <h1 className="text-indigo-800 text-4xl sm:text-6xl font-mono font-bold">facepal</h1>
+                <Image 
+                src={'/imgs/facepal_logo.png'}
+                alt='logo'
+                width={264}
+                height={823}
+                className='w-[300px] h-[60px] sm:h-[100px]'
+                />
                 <h2 className="text-2xl sm:text-3xl mt-4">The Coolest way to connect with friends and hold money</h2>
             </div>
             <div className="w-full  flex flex-col gap-5">
@@ -113,7 +119,7 @@ export default function Home() {
                   </Link>
                 </div>
   
-                <p className="text-2xl text-white text-center">Want to become a facepal partner? <Link href="/partner-signup" className="underline">Become a partner</Link></p>
+                <p className="text-lg text-white text-center">Want to become a facepal partner? <Link href="/partner-signup" className="underline">Become a partner</Link></p>
                 
             </div>
         </div>

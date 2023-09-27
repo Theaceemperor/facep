@@ -56,7 +56,7 @@ export default function Feeds() {
                       className="rounded-full" 
                       width={58} 
                       height={58} 
-                      src={'/imgs/joy.webp'}
+                      src={session?.user.image}
                       alt="profile photo" />
                     </Link>
                 </header>

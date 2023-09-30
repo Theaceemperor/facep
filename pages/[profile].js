@@ -4,18 +4,18 @@ import { useSession, signOut } from 'next-auth/react';
 import React from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import PostDisplay from '@/components/PostDisplay';
 import { db } from '@/settings/firebase.setting';
-import { collection,query,where,getDocs,orderBy, onSnapshot } from 'firebase/firestore';
+import { collection,query,where,getDocs, orderBy } from 'firebase/firestore';
 import { getServerSession } from 'next-auth';
-import { authOptions } from '../api/auth/[...nextauth]';
+import { authOptions } from './api/auth/[...nextauth]';
 import Head from 'next/head';
 import Layout from '@/components/layout';
-import { BiPen } from 'react-icons/bi';
-import { CgDollar } from 'react-icons/cg';
 import { SiHomeassistant } from 'react-icons/si';
 import { MdUnsubscribe } from 'react-icons/md';
 import { timeAgo } from '@/assets/time-ago';
+import FeedsPostDisplay from '@/components/FeedsPostDisplay';
+import { HiBadgeCheck } from 'react-icons/hi';
+import { LuPalmtree } from 'react-icons/lu';
 
 
 export default function Feed() {
@@ -29,7 +29,7 @@ export default function Feed() {
         try {
             const q = query(
                 collection(db,'myposts'),
-                where('user','==',session.user.email),
+                where('author','==',router.query.profile),
                 orderBy('postedAt', 'desc')
                 );
             const onSnapShot = await getDocs(q);
@@ -47,8 +47,14 @@ export default function Feed() {
     }
     handleGetUserPosts();
 
+    const userPostRef = userPosts.map(item => {
+        return item.data.user
+    });
+    const userRefToString = userPostRef[0]
+
     const handleGetUserData = async () => {
-        const u = query(collection(db,'myusers'),where('email','==',session.user.email));
+
+        const u = query(collection(db,'myusers'),where('email','==',userRefToString));
         const userSnapShot = await getDocs(u);
 
         setUserData(userSnapShot.docs.map(doc => {
@@ -60,7 +66,6 @@ export default function Feed() {
             }
         }))
     }; handleGetUserData();
-
     return (
        <Layout>
              <>
@@ -75,20 +80,19 @@ export default function Feed() {
                         {/* Profile holder */}
 
                         <header className="bg-violet-300/50 border-b-2 border-indigo-800/50 p-3">
+                                    {
+                                        userData.map(dataItem => (
                             <div className="flex flex-col gap-1 items-center">
                                 <div className="bg-gradient-to-b from-indigo-500 via-sky-500 to-pink-500 p-1 rounded-full">
                                     <Image 
                                     className="rounded-full w-[60px] h-[60px]" width={58} height= {58} 
-                                    src={session?.user.image} alt="profile photo" />
+                                    src={dataItem.data.imageUrl} alt="profile photo" />
                                 </div>
-                                <small className="text-gray-700"><em>{session?.user.email}</em></small>
-                                <p className="text-gray-700 font-bold">{session?.user.name}</p>
-                                {
-                                    userData.map(dataItem => (
-                                        <small key={dataItem.id} >{dataItem.data.palTag}</small>
+                                <small key={dataItem.id} >{dataItem.data.palTag}</small>
+                                <p className="text-gray-700 font-bold">{dataItem.data.name}</p>
+                            </div>
                                     ))
                                 }
-                            </div>
                             <div className=' text-indigo-900/80 '>
                                 {
                                     userData.map(dataItem => (
@@ -112,16 +116,10 @@ export default function Feed() {
                                             </Link>
                                         </li>
                                         <li>
-                                            <Link href={"/account/settings/edit-profile"}
-                                            className='flex items-center justify-center'>
-                                                <small className='font-bold'>Profile</small> 
-                                                <BiPen className='text-xl'/>
-                                            </Link>
+                                            <HiBadgeCheck className="text-xl font-bold"/>
                                         </li>
                                         <li className="">
-                                            <Link href={"/account/make-transfer"}>
-                                                <CgDollar className='text-xl font-bold'/>
-                                            </Link>
+                                            <LuPalmtree className="text-xl font-bold"/>
                                         </li>
                                         <li><Link href={"/account/pal-text"}><MdUnsubscribe className="text-xl"/></Link></li>
                                         <li className="text-md font-bold flex items-center justify-center"><Link href={"/partners"}><small className='bold'>Partner info</small></Link></li>
@@ -145,7 +143,7 @@ export default function Feed() {
                                 <div className="flex flex-col gap-2">
                                 {
                                     userPosts.map(post => (
-                                    <PostDisplay key={post.id}
+                                    <FeedsPostDisplay key={post.id}
                                     postID={post.id}
                                     timePosted={post.data.postedAt}
                                     body={post.data.body}

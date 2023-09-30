@@ -4,52 +4,74 @@ import Head from "next/head";
 import { db } from "@/settings/firebase.setting";
 import { getDocs,collection,orderBy,query } from "firebase/firestore";
 import React from "react";
+import { PartnersDisplay } from "@/components/PartnersDisplay";
+import Layout from "@/components/layout";
 
-export async function getStaticProps() {
+// export async function getStaticProps() {
 
-    const q = query(collection(db,'partners'),orderBy('createdAt','desc'));
-    const onSnapShot = await getDocs(q);
-    onSnapShot.docs.map(document => {
-        const [ partners,setPartners ] = React.useState([
-            { id: document.id, data:document.data() }
-        ])
-    });
 
-    return {
-        props:{
-            data:partners,
-        }
+
+
+
+//     return {
+//         props:{
+//             data:partners,
+//         }
+//     }
+// }
+
+export default function Partners(params) {
+    const [ partners,setPartners ] = React.useState([]);
+    const handleGetPartners = async () => {
+        const q = query(collection(db,'partners'),orderBy('createdAt','desc'));
+        const onSnapShot = await getDocs(q);
+        
+        setPartners(
+            onSnapShot.docs.map(document => {
+                    return { id: document.id, data:document.data() }
+                })
+            )
     }
-}
+    handleGetPartners();
 
-export default function Partners({data}) {
-    console.log(data);
     return (
-        <>
-            <Head>
-            <link rel="icon" href="/facepal_icon_logo.png" />
-            <meta name="description" content="The Coolest way to connect with friends and hold money" />
-            <meta name="keywords" content="facepal" />
-            <title>facepal | Become a Partner</title>
-            </Head>
-            <main className="px-4 py-6 sm:px-16 sm:py-16 md:px-24 md:py-20">
-                <h1 className="text-4xl text-gray-700">
-                    Choose from our list of partners to access financial services
-                </h1>
+        <Layout>
+            <>
+                <Head>
+                    <link rel="icon" href="/facepal_icon_logo.png" />
+                    <meta name="description" content="The Coolest way to connect with friends and hold money" />
+                    <meta name="keywords" content="facepal" />
+                    <title>facepal | Become a Partner</title>
+                </Head>
+                <main>
+                    <h1 className="text-2xl text-indigo-950/80 text-center py-2 font-bold">
+                        Choose from our list of partners to access financial services.
+                    </h1>
 
-                <section className="grid sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 mt-8">
-                     {/* {
-                    partners.map(item => (
-                        <article>
-                            {item.data.address}
-                        </article>
-                    ))
-                } */}
-                {
-                    partne
-                }
-                </section>
-            </main>
-        </>
+                    <section className="flex flex-col items-center justify-center sm:grid md:grid sm:grid-cols-2 md:grid-cols-3 gap-2 md:gap-4 sm:gap-4 sm:gap-6 my-5 px-2">
+                        {
+                        partners.map(item => (
+                            
+                            <PartnersDisplay 
+                            key={item.id}
+                            companyAddress={item.data.address}
+                            compDesc={item.data.compDec}
+                            companyName={item.data.companyName}
+                            joinedAt={item.data.createdAt}
+                            compEmail={item.data.email}
+                            compLogo={item.data.imageUrl}
+                            nextLink={item.data.pagePath }
+                            compPhone={item.data.phone}
+                            />
+
+                        ))
+                        }
+                    </section>
+                    <Link href={'/partner-signup'}>
+                        Become a partner
+                    </Link>
+                </main>
+            </>
+        </Layout>
     )
 }

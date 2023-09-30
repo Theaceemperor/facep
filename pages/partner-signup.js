@@ -173,7 +173,7 @@ export default function PartnerSignup() {
                 accept='image/*'
                 onChange={imageToPost}/>
 
-                <button type="submit" className="max-w-[160px] h-12 bg-white rounded-lg text-black"
+                <button type="submit" className=" h-12 bg-violet-950/80 rounded-lg text-white"
                 >Submit Application</button>
             </form>
         </div>

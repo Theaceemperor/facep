@@ -42,7 +42,41 @@ export const authOptions = {
                     id:userData.id,
                     name:userData.name,
                     email:userData.email,
-                    image:null,
+                    image:userData.imageUrl,
+                }
+            }
+        }),
+        
+        CredentialsProvider({
+            name: 'Facepal SignUp',
+            id:'sign-up',
+            credentials: {
+                email: { label: 'email', type: 'email' },
+                password: { label: 'password', type: 'password' }
+            },
+            async authorize(credentials, req) {
+                const usersRef = query(collection(db,'myusers'),where("email",'==',credentials.email));
+                const userSnapShot = await getDocs(usersRef);
+
+                if (userSnapShot.empty) {
+                    throw new Error('user not found');
+                }
+
+                const userData = userSnapShot.docs[0].data();
+
+                if (credentials.password != userData.password) {
+                    throw new Error('Email or password incorrect');
+                }
+
+                if (credentials.email != userData.email) {
+                    throw new Error('Invalid Credentials')
+                }
+
+                return {
+                    id:userData.id,
+                    name:userData.name,
+                    email:userData.email,
+                    image:userData.imageUrl,
                 }
             }
         }),

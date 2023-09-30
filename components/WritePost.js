@@ -3,15 +3,23 @@ import Image from 'next/image';
 import { useSession } from 'next-auth/react';
 import { Button,TextField } from '@mui/material';
 import { db,storage } from '@/settings/firebase.setting';
-import { collection,addDoc, updateDoc,doc } from 'firebase/firestore';
-import { cdnImages } from '@/assets/demo_cdn_images';
-import { rangeOfRandNums } from '@/assets/range-of-rand-nums';
+import { collection,addDoc, updateDoc,doc, query, where,getDocs } from 'firebase/firestore';
 import { ref,uploadString,getDownloadURL } from 'firebase/storage';
+import ActivityIndicator from '@/utils/activity-indicator';
+import Customdialog from './CustomDialog';
+import { GiMagicPalm } from 'react-icons/gi';
 
 export default function WritePost() {
     const {data:session} = useSession();
     const [formInput,setFormInput] = useState('');
     const [selectedFile,setSelectedFile] = useState(null);
+    const [ showActivityIndicator,setShowActivityIndicator ] = useState(false);
+
+    //CONFIRMATION DIALOG >>>> START
+    const [openDialog, setOpenDialog] = useState(false);
+    const handleClickOpenDialog = () => setOpenDialog(true);
+    const handleCloseDialog = () => setOpenDialog(false);
+    //CONFIRMATION DIALOG >>>> END
 
     //get image file and convert to base64 string
     const ImageToPost = (e) => {
@@ -29,38 +37,60 @@ export default function WritePost() {
     
     // create post to firestore
     const handleCreatePost = async () => {
-        const docRes = await addDoc(collection(db,'posts'),{
-            body:formInput,
-            author:session?.user.name,
-            user:session?.user.email,
-            postedAt:new Date().getTime(),
-            imageUrl:null
-        })
-        // .then(() => {
+        setShowActivityIndicator(true);
+        try {
+            const usersRef = query(collection(db,'myusers'),where("email",'==',session.user.email));
+            const userSnapShot = await getDocs(usersRef);
 
-        //     setFormInput('');
-        //     alert('Your post was published');
-        // })
-        // .catch(error => console.error(error));
+            const userData = userSnapShot.docs[0].data();
 
-        const imageRef = ref(storage,`posts/${docRes.id}/image`);
+            const docRes = await addDoc(collection(db,'myposts'),{
+                body:formInput,
+                author:session?.user.name,
+                user:session?.user.email,
+                postedAt:new Date().getTime(),
+                imageUrl:'/null',
+                userImg:userData.imageUrl,
+            })
+            // .then(() => {
 
-        await uploadString(imageRef,selectedFile,'data_url')
-        .then(async () => {
-            const imgUrl = await getDownloadURL(imageRef);
-            updateDoc(doc(db,'posts',docRes.id),{
-                imageUrl:imgUrl,
-            });
+            //     setFormInput('');
+            //     alert('Your post was published');
+            // })
+            // .catch(error => console.error(error));
 
-            setFormInput('');
-            alert('Your post was published');
+            const imageRef = ref(storage,`myposts/${docRes.id}/image`);
+            
+            await uploadString(imageRef,selectedFile,'data_url')
+            .then(async () => {
+                try {
+                    const imgUrl = await getDownloadURL(imageRef);
+                updateDoc(doc(db,'myposts',docRes.id),{
+                    imageUrl:imgUrl,
+                });
+                setFormInput('');
+                setOpenDialog(true);
+                setShowActivityIndicator(false);
+            } catch (error) {
+                
+            }
             
         }).catch((e) => console.error(e));
+    } catch (error) {
+            setFormInput('');
+            setOpenDialog(true);
+            setShowActivityIndicator(false);
+            
+        }
     }
-
     
 
     return (
+        showActivityIndicator
+        ?
+        <ActivityIndicator />
+        :
+        <section>
         <form className="flex flex-col border border-gray-100 bg-white rounded-md shadow-md p-3 mb-4 gap-4">
             <div className='flex flex-row items-center gap-4'>
                 {/* <Image 
@@ -112,5 +142,12 @@ export default function WritePost() {
                 </button>
             </div> */}
         </form>
+        <Customdialog 
+        openProp={openDialog} 
+        handleCloseProp={handleCloseDialog} 
+        title={<span className='flex items-center'>Hey Pal <GiMagicPalm /></span>}>
+            <p>Your post has been published successfully!</p>
+        </Customdialog>
+        </section>
     )
 }

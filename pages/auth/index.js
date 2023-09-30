@@ -11,6 +11,7 @@ import { BiHelpCircle } from 'react-icons/bi';
 import AuthenticationIndicator from '@/utils/authentication-indicator';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../api/auth/[...nextauth]';
+import { SiGoogle } from 'react-icons/si';
 
 const validationRules = yup.object().shape({
   email:yup.string().required('this field is rquired!'),
@@ -92,14 +93,13 @@ export default function Home() {
                         <button 
                         type='submit'
                         onClick={handleSubmit}
-                        className="w-full h-12 bg-indigo-800 rounded-lg text-white font-bold text-center"
+                        className="w-full h-12 bg-indigo-950/80 rounded-lg text-white font-bold text-center"
                         >Log in to facepal</button>
                         <button 
                         onClick={() => signIn('google')}
-                        className="w-full h-12 text-center flex flex-row gap-4 justify-center items-center bg-green-400/50 rounded-lg text-white font-bold"
+                        className="w-full h-12 text-center flex flex-row justify-center items-center bg-green-400/40 rounded-lg text-white font-bold"
                         >
-                          Google login
-                          <AiOutlineDoubleRight />
+                          <SiGoogle />oogle login
                         </button>
                     </div>
                 </form>
@@ -119,7 +119,7 @@ export default function Home() {
                   </Link>
                 </div>
   
-                <p className="text-lg text-white text-center">Want to become a facepal partner? <Link href="/partner-signup" className="underline">Become a partner</Link></p>
+                <p className="text-sm text-white text-center">Want to become a facepal partner? <Link href="/partner-signup" className="underline">Become a partner</Link></p>
                 
             </div>
         </div>

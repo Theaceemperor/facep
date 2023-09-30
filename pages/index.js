@@ -5,6 +5,8 @@ import { useRouter } from 'next/router';
 import MetaHeader from '@/utils/metahead';
 import { AiOutlineDoubleRight } from 'react-icons/ai';
 import { BiHelpCircle } from 'react-icons/bi';
+import { getServerSession } from 'next-auth';
+import { authOptions } from './api/auth/[...nextauth]';
 
 export default function Home() {
   const router = useRouter();
@@ -46,4 +48,23 @@ export default function Home() {
       </div>
     </>
   )
+}
+
+export async function getServerSideProps(context) {
+  const session = await getServerSession(context.req,context.res,authOptions);
+  
+  if(session) {
+    return {
+      redirect:{
+        destination:'/feeds',
+        permanent:false,
+      }
+    }
+  }
+
+  return {
+    props:{
+      session:session
+    }
+  }
 }

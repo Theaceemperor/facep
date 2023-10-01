@@ -22,7 +22,7 @@ export default function Layout({children}) {
                 </AdsNotification>
             </blockquote>
             <OnLoginNotification 
-                alertTitle={"Successfully logged in"}
+                alertTitle={"Authenticated"}
                 >
                     <span>
                         Logged in as {session?.user.name}

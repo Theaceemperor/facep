@@ -25,45 +25,47 @@ export default function Feed() {
     const [userPosts, setUserPosts] = React.useState([]);
     const [userData, setUserData] = React.useState([]);
 
-    const handleGetUserPosts = async () => {
-        try {
-            const q = query(
-                collection(db,'myposts'),
-                where('user','==',session.user.email),
-                orderBy('postedAt', 'desc')
-                );
-            const onSnapShot = await getDocs(q);
-            setUserPosts(onSnapShot.docs.map(doc => {
+    React.useEffect(() => {
+        const handleGetUserPosts = async () => {
+            try {
+                const q = query(
+                    collection(db,'myposts'),
+                    where('user','==',session.user.email),
+                    orderBy('postedAt', 'desc')
+                    );
+                const onSnapShot = await getDocs(q);
+                setUserPosts(onSnapShot.docs.map(doc => {
+                    return {
+                        id:doc.id,
+                        data:{
+                            ...doc.data()
+                        }
+                    }
+                }));            
+            } catch (error) {
+    
+            }
+        }
+        handleGetUserPosts();
+    
+        const handleGetUserData = async () => {
+           try {
+            const u = query(collection(db,'myusers'),where('email','==',session.user.email));
+            const userSnapShot = await getDocs(u);
+    
+            setUserData(userSnapShot.docs.map(doc => {
                 return {
                     id:doc.id,
                     data:{
                         ...doc.data()
                     }
                 }
-            }));            
-        } catch (error) {
-
-        }
-    }
-    handleGetUserPosts();
-
-    const handleGetUserData = async () => {
-       try {
-        const u = query(collection(db,'myusers'),where('email','==',session.user.email));
-        const userSnapShot = await getDocs(u);
-
-        setUserData(userSnapShot.docs.map(doc => {
-            return {
-                id:doc.id,
-                data:{
-                    ...doc.data()
-                }
-            }
-        }));
-       } catch (error) {
-        
-       }
-    }; handleGetUserData();
+            }));
+           } catch (error) {
+            
+           }
+        }; handleGetUserData();
+    })
 
     return (
        <Layout>

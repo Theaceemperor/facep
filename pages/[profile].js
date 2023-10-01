@@ -25,47 +25,50 @@ export default function Feed() {
     const [userPosts, setUserPosts] = React.useState([]);
     const [userData, setUserData] = React.useState([]);
 
-    const handleGetUserPosts = async () => {
-        try {
-            const q = query(
-                collection(db,'myposts'),
-                where('author','==',router.query.profile),
-                orderBy('postedAt', 'desc')
-                );
-            const onSnapShot = await getDocs(q);
-            setUserPosts(onSnapShot.docs.map(doc => {
+    React.useEffect(() => {
+        const handleGetUserPosts = async () => {
+            try {
+                const q = query(
+                    collection(db,'myposts'),
+                    where('author','==',router.query.profile),
+                    orderBy('postedAt', 'desc')
+                    );
+                const onSnapShot = await getDocs(q);
+                setUserPosts(onSnapShot.docs.map(doc => {
+                    return {
+                        id:doc.id,
+                        data:{
+                            ...doc.data()
+                        }
+                    }
+                }));            
+            } catch (error) {
+    
+            }
+        }
+        handleGetUserPosts();
+    
+        const userPostRef = userPosts.map(item => {
+            return item.data.user
+        });
+        const userRefToString = userPostRef[0]
+    
+        const handleGetUserData = async () => {
+    
+            const u = query(collection(db,'myusers'),where('email','==',userRefToString));
+            const userSnapShot = await getDocs(u);
+    
+            setUserData(userSnapShot.docs.map(doc => {
                 return {
                     id:doc.id,
                     data:{
                         ...doc.data()
                     }
                 }
-            }));            
-        } catch (error) {
-
-        }
-    }
-    handleGetUserPosts();
-
-    const userPostRef = userPosts.map(item => {
-        return item.data.user
+            }))
+        }; handleGetUserData();
     });
-    const userRefToString = userPostRef[0]
 
-    const handleGetUserData = async () => {
-
-        const u = query(collection(db,'myusers'),where('email','==',userRefToString));
-        const userSnapShot = await getDocs(u);
-
-        setUserData(userSnapShot.docs.map(doc => {
-            return {
-                id:doc.id,
-                data:{
-                    ...doc.data()
-                }
-            }
-        }))
-    }; handleGetUserData();
     return (
        <Layout>
              <>

@@ -1,7 +1,6 @@
 
 import Image from 'next/image';
 import Link from "next/link";
-import { useRouter } from 'next/router';
 import MetaHeader from '@/utils/metahead';
 import { AiOutlineDoubleRight } from 'react-icons/ai';
 import { BiHelpCircle } from 'react-icons/bi';
@@ -9,7 +8,6 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from './api/auth/[...nextauth]';
 
 export default function Home() {
-  const router = useRouter();
 
   return (
     <>

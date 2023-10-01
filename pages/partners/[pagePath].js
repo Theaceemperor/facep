@@ -35,15 +35,17 @@ export default function PartnerInfo () {
     const router = useRouter();
     const [ partners,setPartners ] = React.useState([]);
     
-    const getPartnerInfo = async () => {
-        const q = query(collection(db,'partners'),where('pagePath','==',router.query.pagePath));
-        const onSnapShot = await getDocs(q);
-        
-        setPartners(onSnapShot.docs.map((doc) => {
-            return { id:doc.id, data: { ...doc.data() } }
-        }))
-    }
-    getPartnerInfo();
+    React.useEffect(() => {
+        const getPartnerInfo = async () => {
+            const q = query(collection(db,'partners'),where('pagePath','==',router.query.pagePath));
+            const onSnapShot = await getDocs(q);
+            
+            setPartners(onSnapShot.docs.map((doc) => {
+                return { id:doc.id, data: { ...doc.data() } }
+            }))
+        }
+        getPartnerInfo();
+    })
 
 
     return (

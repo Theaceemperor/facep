@@ -17,7 +17,6 @@ import { timeAgo } from '@/assets/time-ago';
 import { GiMagicPalm } from 'react-icons/gi';
 
 export default function PostDisplay({postID,timePosted,body,postImage,name,imgSrc,postLikes}) {
-    const {data:session} = useSession();
    // const { usersPost } = React.useContext(AppContext);
     
         // const getPostByAuthorInfo = (authorUID) => {

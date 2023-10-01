@@ -48,6 +48,7 @@ export default function Feed() {
     handleGetUserPosts();
 
     const handleGetUserData = async () => {
+       try {
         const u = query(collection(db,'myusers'),where('email','==',session.user.email));
         const userSnapShot = await getDocs(u);
 
@@ -58,7 +59,10 @@ export default function Feed() {
                     ...doc.data()
                 }
             }
-        }))
+        }));
+       } catch (error) {
+        
+       }
     }; handleGetUserData();
 
     return (

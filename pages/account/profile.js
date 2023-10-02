@@ -126,10 +126,10 @@ export default function Feed() {
                                         </li>
                                         <li className="">
                                             <Link href={"/account/make-transfer"}>
-                                                <CgDollar className='text-xl font-bold'/>
+                                                <CgDollar className='text-xl font-bold animate-spin hover:animate-none focus:animate-none'/>
                                             </Link>
                                         </li>
-                                        <li><Link href={"/account/pal-text"}><MdUnsubscribe className="text-xl"/></Link></li>
+                                        <li><Link href={"/account/pal-text"}><MdUnsubscribe className="text-xl animate-bounce hover:animate-none focus:animate-none"/></Link></li>
                                         <li className="text-md font-bold flex items-center justify-center"><Link href={"/partners"}><small className='bold'>Partner info</small></Link></li>
                                     </ul>
                                 </div>

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
 import { signOut, useSession } from 'next-auth/react';
 import { Button,TextField } from '@mui/material';
@@ -6,11 +6,15 @@ import { db, } from '@/settings/firebase.setting';
 import { collection, updateDoc,doc, query, where,getDocs } from 'firebase/firestore';
 import ActivityIndicator from '@/utils/activity-indicator';
 import { useFormik } from 'formik';
+import { GiMagicPalm } from 'react-icons/gi';
+import Customdialog from './CustomDialog';
 
 export function EditAbout() {
     const {data:session} = useSession();
     const [ showActivityIndicator,setShowActivityIndicator ] = useState(false);
-    
+    const [openLikeDialog, setOpenLikeDialog] = React.useState(false);
+    const handleCloseLikeDialog = () => setOpenLikeDialog(false);
+
     // create post to firestore
     const handleCreatePost = async () => {
         setShowActivityIndicator(true);
@@ -23,8 +27,8 @@ export function EditAbout() {
                 about:values.about,
             }).then(() => {
                 handleChange('');
-                alert('Your data was sent');
                 setShowActivityIndicator(false);
+                setOpenLikeDialog(true);
                 
             }).catch((e) => console.error(e));
         } catch (error) {
@@ -45,46 +49,58 @@ export function EditAbout() {
         ?
         <ActivityIndicator />
         :
-        <form className="flex max-w-[480px] flex-col border-2 border-violet-950/20 bg-white bg-violet-950/30 rounded-md shadow-md p-3 gap-4 w-full" onSubmit={handleSubmit}>
-            <h3 className='text-center text-indigo-950/80 font-bold'>Update about info</h3>
-            <div className='flex flex-row items-center gap-4'>
-                <Image 
-                className="rounded-full w-[50px] h-[50px]" 
-                width={48} 
-                height={48}
-                src={session?.user.image} 
-                alt="profile photo" />
+        <section>
+            <form className="flex max-w-[480px] flex-col border-2 border-violet-950/20 bg-white bg-violet-950/30 rounded-md shadow-md p-3 gap-4 w-full" onSubmit={handleSubmit}>
+                <h3 className='text-center text-indigo-950/80 font-bold'>Update about info</h3>
+                <div className='flex flex-row items-center gap-4'>
+                    <Image 
+                    className="rounded-full w-[50px] h-[50px]" 
+                    width={48} 
+                    height={48}
+                    src={session?.user.image} 
+                    alt="profile photo" />
 
-                <div className='w-full flex flex-col gap-2 placeholder:text-indigo-950/80'>
-                    <TextField
-                    id='about'
-                    multiline={true}
-                    className='w-full'
-                    placeholder="about info..."
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    value={values.about}
-                    />
+                    <div className='w-full flex flex-col gap-2 placeholder:text-indigo-950/80'>
+                        <TextField
+                        id='about'
+                        multiline={true}
+                        className='w-full'
+                        placeholder="about info..."
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        value={values.about}
+                        />
 
-                    {
-                        values.about.length > 0
-                        ?
-                        <Button 
-                        variant='outlined'
-                        className='block w-[100px]'
-                        type='submit'>Update
-                        </Button>
-                    : null
-                    }
+                        {
+                            values.about.length > 0
+                            ?
+                            <Button 
+                            variant='outlined'
+                            className='block w-[100px]'
+                            type='submit'>Update
+                            </Button>
+                        : null
+                        }
+                    </div>
                 </div>
-            </div>
-            <hr style={{color:'black',background:'black'}}/>
-        </form>
+                <hr style={{color:'black',background:'black'}}/>
+            </form>
+
+            {/* Like Dialog */}
+            <Customdialog 
+            openProp={openLikeDialog} 
+            handleCloseProp={handleCloseLikeDialog} 
+            title={<span className='flex items-center'>Hey Pal <GiMagicPalm /></span>}>
+                <p>Your About info was edited successfully!</p>
+            </Customdialog>
+        </section>
     )
 }
 export function EditLocation() {
     const {data:session} = useSession();
     const [ showActivityIndicator,setShowActivityIndicator ] = useState(false);
+    const [openLikeDialog, setOpenLikeDialog] = React.useState(false);
+    const handleCloseLikeDialog = () => setOpenLikeDialog(false);
     
     // create post to firestore
     const handleCreatePost = async () => {
@@ -98,8 +114,8 @@ export function EditLocation() {
                 location:values.location,
             }).then(() => {
                 handleChange('');
-                alert('Your data was sent');
                 setShowActivityIndicator(false);
+                setOpenLikeDialog(true);
                 
             }).catch((e) => console.error(e));
         } catch (error) {
@@ -120,46 +136,58 @@ export function EditLocation() {
         ?
         <ActivityIndicator />
         :
-        <form className="flex max-w-[480px] flex-col border-2 border-violet-950/20 bg-white bg-violet-950/30 rounded-md shadow-md p-3 gap-4 w-full" onSubmit={handleSubmit}>
-            <h3 className='text-center text-indigo-950/80 font-bold'>Update location</h3>
-            <div className='flex flex-row items-center gap-4'>
-                <Image 
-                className="rounded-full w-[50px] h-[50px]" 
-                width={48} 
-                height={48}
-                src={session?.user.image} 
-                alt="profile photo" />
+        <section>
+            <form className="flex max-w-[480px] flex-col border-2 border-violet-950/20 bg-white bg-violet-950/30 rounded-md shadow-md p-3 gap-4 w-full" onSubmit={handleSubmit}>
+                <h3 className='text-center text-indigo-950/80 font-bold'>Update location</h3>
+                <div className='flex flex-row items-center gap-4'>
+                    <Image 
+                    className="rounded-full w-[50px] h-[50px]" 
+                    width={48} 
+                    height={48}
+                    src={session?.user.image} 
+                    alt="profile photo" />
 
-                <div className='w-full flex flex-col gap-2 placeholder:text-indigo-950/80'>
-                    <TextField
-                    id='location'
-                    className='w-full'
-                    placeholder="current location"
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    value={values.location}
-                    />
+                    <div className='w-full flex flex-col gap-2 placeholder:text-indigo-950/80'>
+                        <TextField
+                        id='location'
+                        className='w-full'
+                        placeholder="current location"
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        value={values.location}
+                        />
 
-                    {
-                        values.location.length > 0
-                        ?
-                        <Button 
-                        variant='outlined'
-                        className='block w-[100px]'
-                        type='submit'>Update
-                        </Button>
-                    : null
-                    }
+                        {
+                            values.location.length > 0
+                            ?
+                            <Button 
+                            variant='outlined'
+                            className='block w-[100px]'
+                            type='submit'>Update
+                            </Button>
+                        : null
+                        }
+                    </div>
                 </div>
-            </div>
-            <hr style={{color:'black',background:'black'}}/>
-        </form>
+                <hr style={{color:'black',background:'black'}}/>
+            </form>
+
+            {/* Like Dialog */}
+            <Customdialog 
+            openProp={openLikeDialog} 
+            handleCloseProp={handleCloseLikeDialog} 
+            title={<span className='flex items-center'>Hey Pal <GiMagicPalm /></span>}>
+                <p>Your Location has been updated successfully!</p>
+            </Customdialog>
+        </section>
     )
 }
 
 export function EditPalName() {
     const {data:session} = useSession();
     const [ showActivityIndicator,setShowActivityIndicator ] = useState(false);
+    const [openLikeDialog, setOpenLikeDialog] = React.useState(false);
+    const handleCloseLikeDialog = () => setOpenLikeDialog(false);
     
     // create post to firestore
     const handleCreatePost = async () => {
@@ -171,13 +199,9 @@ export function EditPalName() {
 
             await updateDoc(doc(db,'myusers',userId),{
                 name:values.palName,
-            }).then(() => {
-                handleChange('');
-                alert('Your data was sent');
-                setShowActivityIndicator(false);
-                signOut()
-                
-            }).catch((e) => console.error(e));
+            }).then(
+
+            ).catch((e) => console.error(e));
         } catch (error) {
             
         }
@@ -187,6 +211,21 @@ export function EditPalName() {
         initialValues: { palName:'' },
         onSubmit: values => {
             handleCreatePost();
+            const handlePostAuthor = async () => {
+                const userPostRef = query(collection(db,'myposts'),where('user','==',session.user.email))
+                const userPostSnapShot = await getDocs(userPostRef);
+                const userPostId = userPostSnapShot.docs[0].id;
+                await updateDoc(doc(db,'myposts',userPostId),{
+                    author:values.palName,
+                }).then(() => {
+                    handleChange('');
+                    setShowActivityIndicator(false);
+                    setOpenLikeDialog(true);
+                    signOut();
+                })
+                console.log(userPostSnapShot);
+            }
+            handlePostAuthor();
         }
     })
     
@@ -196,47 +235,59 @@ export function EditPalName() {
         ?
         <ActivityIndicator />
         :
-        <form className="flex max-w-[480px] flex-col border-2 border-violet-950/20 bg-white bg-violet-950/30 rounded-md shadow-md p-3 gap-4 w-full" onSubmit={handleSubmit}>
-            <h3 className='text-center text-indigo-950/80 font-bold'>Update pal name</h3>
-            <div className='flex flex-row items-center gap-4'>
-                <Image 
-                className="rounded-full w-[50px] h-[50px]" 
-                width={48} 
-                height={48}
-                src={session?.user.image} 
-                alt="profile photo" />
+        <section>
+            <form className="flex max-w-[480px] flex-col border-2 border-violet-950/20 bg-white bg-violet-950/30 rounded-md shadow-md p-3 gap-4 w-full" onSubmit={handleSubmit}>
+                <h3 className='text-center text-indigo-950/80 font-bold'>Update pal name</h3>
+                <div className='flex flex-row items-center gap-4'>
+                    <Image 
+                    className="rounded-full w-[50px] h-[50px]" 
+                    width={48} 
+                    height={48}
+                    src={session?.user.image} 
+                    alt="profile photo" />
 
-                <div className='w-full flex flex-col gap-2 placeholder:text-indigo-950/80'>
-                    <TextField
-                    id='palName'
-                    className='w-full'
-                    placeholder="pal name"
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    value={values.palName}
-                    />
+                    <div className='w-full flex flex-col gap-2 placeholder:text-indigo-950/80'>
+                        <TextField
+                        id='palName'
+                        className='w-full'
+                        placeholder="pal name"
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        value={values.palName}
+                        />
 
-                    {
-                        values.palName.length > 0
-                        ?
-                        <Button 
-                        variant='outlined'
-                        className='block w-[100px]'
-                        type='submit'>Update
-                        </Button>
-                    : null
-                    }
+                        {
+                            values.palName.length > 0
+                            ?
+                            <Button 
+                            variant='outlined'
+                            className='block w-[100px]'
+                            type='submit'>Update
+                            </Button>
+                        : null
+                        }
+                    </div>
                 </div>
-            </div>
-            <hr style={{color:'black',background:'black'}}/>
-        </form>
+                <hr style={{color:'black',background:'black'}}/>
+            </form>
+            
+            {/* Like Dialog */}
+            <Customdialog 
+            openProp={openLikeDialog} 
+            handleCloseProp={handleCloseLikeDialog} 
+            title={<span className='flex items-center'>Hey Pal <GiMagicPalm /></span>}>
+                <p>Your Pal name has been updated successfully!</p>
+            </Customdialog>
+        </section>
     )
 }
 
 export function EditPalTag() {
     const {data:session} = useSession();
     const [ showActivityIndicator,setShowActivityIndicator ] = useState(false);
-    
+    const [openLikeDialog, setOpenLikeDialog] = React.useState(false);
+    const handleCloseLikeDialog = () => setOpenLikeDialog(false);
+
     // create post to firestore
     const handleCreatePost = async () => {
         setShowActivityIndicator(true);
@@ -248,9 +299,9 @@ export function EditPalTag() {
             await updateDoc(doc(db,'myusers',userId),{
                 palTag:values.palTag,
             }).then(() => {
-                alert('Your data was sent');
                 values.palTag = null;
                 setShowActivityIndicator(false);
+                setOpenLikeDialog(true);
                 
             }).catch((e) => console.error(e));
         } catch (error) {
@@ -271,40 +322,50 @@ export function EditPalTag() {
         ?
         <ActivityIndicator />
         :
-        <form className="flex max-w-[480px] flex-col border-2 border-violet-950/20 bg-white bg-violet-950/30 rounded-md shadow-md p-3 gap-4 w-full" onSubmit={handleSubmit}>
-            <h3 className='text-center text-indigo-950/80 font-bold'>Update Pal Tag e.g.@facepal</h3>
-            <div className='flex flex-row items-center gap-4'>
-                <Image 
-                className="rounded-full w-[50px] h-[50px]" 
-                width={48} 
-                height={48}
-                src={session?.user.image} 
-                alt="profile photo" />
+        <section>
+            <form className="flex max-w-[480px] flex-col border-2 border-violet-950/20 bg-white bg-violet-950/30 rounded-md shadow-md p-3 gap-4 w-full" onSubmit={handleSubmit}>
+                <h3 className='text-center text-indigo-950/80 font-bold'>Update Pal Tag e.g.@facepal</h3>
+                <div className='flex flex-row items-center gap-4'>
+                    <Image 
+                    className="rounded-full w-[50px] h-[50px]" 
+                    width={48} 
+                    height={48}
+                    src={session?.user.image} 
+                    alt="profile photo" />
 
-                <div className='w-full flex flex-col gap-2 placeholder:text-indigo-950/80'>
-                    <TextField
-                    id='palTag'
-                    className='w-full'
-                    placeholder="@facepal"
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    value={values.palTag}
-                    />
+                    <div className='w-full flex flex-col gap-2 placeholder:text-indigo-950/80'>
+                        <TextField
+                        id='palTag'
+                        className='w-full'
+                        placeholder="@facepal"
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        value={values.palTag}
+                        />
 
-                    {
-                        values.palTag.length > 0
-                        ?
-                        <Button 
-                        variant='outlined'
-                        className='block w-[100px]'
-                        type='submit'>Update
-                        </Button>
-                    : null
-                    }
+                        {
+                            values.palTag.length > 0
+                            ?
+                            <Button 
+                            variant='outlined'
+                            className='block w-[100px]'
+                            type='submit'>Update
+                            </Button>
+                        : null
+                        }
+                    </div>
                 </div>
-            </div>
-            <hr style={{color:'black',background:'black'}}/>
-        </form>
+                <hr style={{color:'black',background:'black'}}/>
+            </form>
+
+            {/* Like Dialog */}
+            <Customdialog 
+            openProp={openLikeDialog} 
+            handleCloseProp={handleCloseLikeDialog} 
+            title={<span className='flex items-center'>Hey Pal <GiMagicPalm /></span>}>
+                <p>Your Pal tag has been updated successfully!</p>
+            </Customdialog>
+        </section>
     )
 }
 

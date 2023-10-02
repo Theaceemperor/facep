@@ -48,7 +48,7 @@ export function TopNavigationBar() {
                 <Link href={'/account/profile'}
                 className="w-[55px] h-[55px]">
                     <Image 
-                    className="rounded-full w-[55px] h-[55px]" 
+                    className="rounded-full w-[55px] h-[55px] border-2 border-indigo-950/80" 
                     width={55} 
                     height={55} 
                     src={session?.user.image}
@@ -69,7 +69,7 @@ export function TopNavigationBar() {
                 
                 <Link href={'/account/profile'} className="w-[55px] h-[55px]">
                     <Image 
-                    className="rounded-full w-[55px] h-[55px]" 
+                    className="rounded-full w-[55px] h-[55px] border-2 border-indigo-950/80" 
                     width={55} 
                     height={55} 
                     src={session?.user.image}

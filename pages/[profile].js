@@ -22,15 +22,41 @@ export default function Feed() {
     const {data:session} = useSession();
     const router = useRouter();
 
+    const [userPostData, setUserPostData] = React.useState([]);
     const [userPosts, setUserPosts] = React.useState([]);
     const [userData, setUserData] = React.useState([]);
+    const profileQuery = router.query.profile;
 
     React.useEffect(() => {
-        const handleGetUserPosts = async () => {
+        const handleGetUserPostData = async () => {
             try {
                 const q = query(
                     collection(db,'myposts'),
-                    where('author','==',router.query.profile),
+                    where('author','==',profileQuery),
+                    );
+                const onSnapShot = await getDocs(q);
+                setUserPostData(onSnapShot.docs.map(doc => {
+                    return {
+                        id:doc.id,
+                        data:{
+                            ...doc.data()
+                        }
+                    }
+                }));            
+            } catch (error) {
+    
+            }
+        }
+        handleGetUserPostData();
+        const handleGetUserPosts = async () => {
+            try {
+                const userRef = userPostData.map(item => {
+                    return item.data.user
+                });
+                const userRefString = userRef[0]
+                const q = query(
+                    collection(db,'myposts'),
+                    where('user','==',userRefString),
                     orderBy('postedAt', 'desc')
                     );
                 const onSnapShot = await getDocs(q);
@@ -124,7 +150,7 @@ export default function Feed() {
                                         <li className="">
                                             <LuPalmtree className="text-xl font-bold"/>
                                         </li>
-                                        <li><Link href={"/account/pal-text"}><MdUnsubscribe className="text-xl"/></Link></li>
+                                        <li><Link href={"/account/pal-text"}><MdUnsubscribe className="text-xl animate-bounce"/></Link></li>
                                         <li className="text-md font-bold flex items-center justify-center"><Link href={"/partners"}><small className='bold'>Partner info</small></Link></li>
                                     </ul>
                                 </div>

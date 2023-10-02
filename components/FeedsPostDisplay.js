@@ -1,6 +1,5 @@
 import Image from 'next/image';
 import React from 'react';
-import { useSession } from 'next-auth/react';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ChatBubbleOutlineRoundedIcon from '@mui/icons-material/ChatBubbleOutlineRounded';
 import PublicIcon from '@mui/icons-material/Public';
@@ -97,7 +96,7 @@ export default function FeedsPostDisplay({postID,timePosted,body,postImage,name,
             <ul className="flex justify-between px-4">
                 <li className="flex flex-row gap-1 items-center text-indigo-950/80">
                     <Image 
-                    className="rounded-full w-[45px] h-[45px] border-2 border-indigo-950/80" 
+                    className="rounded-full w-[45px] h-[45px] border-2 border-indigo-950/80 animate-bounce" 
                     src={imgSrc} 
                     width={40} height={40} 
                     alt="profile photo"

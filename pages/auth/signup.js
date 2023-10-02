@@ -128,7 +128,7 @@ export default function Signup() {
                         <button className="w-full h-12 bg-green-600 rounded-lg text-white font-bold" onClick={() => signIn("google")}>Google</button>
                         <button className="w-full h-12 bg-sky-600 rounded-lg text-white font-bold">Twitter</button>
                     </div>
-                    <p className="text-sm text-indigo-950/80 text-center">Do you own a facepal account? Login <Link href="/partner-signup" className="underline">here</Link></p>
+                    <p className="text-sm text-indigo-950/80 text-center">Do you own a facepal account? Login <Link href="/auth" className="underline">here</Link></p>
                 </div>
             </main>
         </>

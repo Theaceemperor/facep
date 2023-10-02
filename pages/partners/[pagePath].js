@@ -7,6 +7,7 @@ import React from "react";
 import Link from "next/link";
 import { PartnersDisplay } from "@/components/PartnersDisplay";
 import Layout from "@/components/layout";
+import { timeAgo } from "@/assets/time-ago";
 
 // export async function getStaticPaths() {
 //     const onSnapShot = await getDocs(collection(db,'partners'));
@@ -70,7 +71,7 @@ export default function PartnerInfo () {
                             companyAddress={item.data.address}
                             compDesc={item.data.compDec}
                             companyName={item.data.companyName}
-                            joinedAt={item.data.createdAt}
+                            joinedAt={timeAgo(item.data.createdAt)}
                             compEmail={item.data.email}
                             compLogo={item.data.imageUrl}
                             nextLink={item.data.pagePath }

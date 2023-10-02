@@ -4,6 +4,7 @@ import ProfileEdit from "@/components/ProfileImageEdit";
 import Layout from "@/components/layout";
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
 import { getServerSession } from "next-auth";
+import Head from "next/head";
 
 export default function EditProfile() {
 

@@ -6,6 +6,7 @@ import { getDocs,collection,orderBy,query } from "firebase/firestore";
 import React from "react";
 import { PartnersDisplay } from "@/components/PartnersDisplay";
 import Layout from "@/components/layout";
+import { timeAgo } from "@/assets/time-ago";
 
 // export async function getStaticProps() {
 
@@ -57,7 +58,7 @@ export default function Partners(params) {
                             companyAddress={item.data.address}
                             compDesc={item.data.compDec}
                             companyName={item.data.companyName}
-                            joinedAt={item.data.createdAt}
+                            joinedAt={timeAgo(item.data.createdAt)}
                             compEmail={item.data.email}
                             compLogo={item.data.imageUrl}
                             nextLink={item.data.pagePath }
